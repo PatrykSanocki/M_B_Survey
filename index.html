@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Zen Loop&display=swap"
+      rel="stylesheet"
+    />
+    <title>Survey</title>
+    <style>
+      :root {
+        --color-primary: #005af0;
+        --color-text-light: #fff;
+        --color-text-dark: #000;
+        --color-bg-light: #fafafc;
+
+        --space-1: 0.5rem;
+        /* 8px */
+        --space-2: 1rem;
+        /* 16px */
+        --space-3: 1.5rem;
+        /* 24px */
+        --space-4: 2rem;
+        /* 32px */
+        --space-5: 3rem;
+        /* 48px */
+      }
+
+      body {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        font-family: "Raleway", sans-serif;
+        max-width: 100vw;
+        overflow-x: hidden;
+      }
+
+      header {
+        text-align: center;
+        border-bottom: 3px solid black;
+        border-radius: 50%;
+      }
+
+      header p {
+        font-family: "Zen Loop", cursive;
+        font-weight: bold;
+        font-size: 28pt;
+        padding: 0;
+        margin: 10px 0;
+      }
+
+      header p.text {
+        background-color: black;
+      }
+
+      div.wrap {
+        max-width: 976px;
+        margin: 0 auto;
+        margin-top: 10px;
+      }
+
+      p.question {
+        font-weight: bold;
+        text-align: justify;
+      }
+
+      p.sub-question {
+        text-align: justify;
+        margin-top: -10px;
+        font-style: italic;
+      }
+
+      .stepper.simple .step-dots {
+        user-select: none;
+      }
+
+      .stepper.simple .step-dot {
+        display: inline-block;
+        background: #ddd;
+        overflow: hidden;
+        text-indent: -999px;
+        border-radius: 100%;
+        width: 10px;
+        height: 10px;
+        box-shadow: inset 0 1px 1px 0 #999;
+      }
+
+      .stepper.simple .step-dot.active {
+        background: linear-gradient(#00cfff, #1584bc);
+        box-shadow: inset 0 0 1px 1px #087dc0;
+      }
+
+      .stepper.simple section {
+        background-color: var(--color-bg-light);
+      }
+
+      .stepper.simple .content {
+        min-height: calc(100vh - 92px - 96px);
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .stepper.simple .content input {
+        line-height: 16pt;
+        margin: 8px;
+      }
+
+      .stepper.simple .content input.other-input {
+        width: calc(100% - 15px - 8px);
+      }
+
+      .stepper.simple .content div.range-selector {
+        width: calc(100% - 15px);
+        margin: 0 8px;
+        display: flex;
+      }
+
+      .stepper.simple .content div.range-selector input[type="range"] {
+        flex-grow: 1;
+      }
+
+      .stepper.simple .top-bar,
+      .stepper.simple .bottom-bar {
+        height: var(--space-5);
+        line-height: var(--space-5);
+        background-color: #f2f2f2;
+        color: black;
+      }
+
+      .stepper.simple .top-bar {
+        padding: 0 var(--space-3);
+        font-size: var(--space-2);
+      }
+
+      .stepper.simple .bottom-bar {
+        height: var(--space-5);
+        line-height: var(--space-5);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .stepper.simple .bottom-bar .button-next,
+      .stepper.simple .bottom-bar .button-prev {
+        cursor: pointer;
+        position: absolute;
+        height: 100%;
+        border: none;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        width: 72px;
+        user-select: none;
+        background: unset;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .stepper.simple .bottom-bar .button-prev {
+        top: 0;
+        left: 0;
+      }
+
+      .stepper.simple .bottom-bar .button-next {
+        top: 0;
+        right: 0;
+      }
+
+      .stepper.simple .bottom-bar .button-next:after {
+        padding: var(--space-1);
+        content: ">";
+        font-weight: 500;
+      }
+
+      .stepper.simple .bottom-bar .button-prev:before {
+        padding: var(--space-1);
+        content: "<";
+        font-weight: 500;
+      }
+
+      .poll [option] {
+        display: flex;
+        align-items: center;
+      }
+
+      .poll.poll-horizontal {
+        display: inline-flex;
+      }
+      .poll.poll-horizontal label:not(:first-child) {
+        margin-left: 15px;
+      }
+
+      .multi-wrap {
+        display: flex;
+        box-sizing: border-box;
+        max-width: calc(100vw - 30px);
+        width: 100%;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid grey;
+        justify-content: space-around;
+      }
+
+      .multi-question .multi-wrap:first-of-type {
+        border-top: 1px solid grey;
+        padding-top: 10px;
+      }
+
+      .multi-wrap .multi-text {
+        vertical-align: middle;
+        text-align: justify;
+        flex-basis: 40%;
+        margin-right: 20px;
+      }
+
+      .multi-wrap .poll {
+        overflow-x: auto;
+      }
+
+      .poll.multi-poll {
+        flex-basis: 55%;
+      }
+
+      .multi-wrap .multi-table {
+        position: relative;
+        overflow-x: scroll;
+        top: 50%;
+        flex-basis: 60%;
+        transform: translateY(-50%);
+        margin: 0 auto;
+        padding: 20px 0;
+      }
+
+      .multi-wrap .multi-table th,
+      .multi-wrap .multi-table td {
+        min-width: 60px;
+        position: relative;
+      }
+      .multi-wrap .multi-table td span {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .multi-table th {
+        text-align: center;
+      }
+
+      .multi-table span {
+        margin-top: 2px;
+      }
+
+      #q1-other-input,
+      #q10-other-input {
+        display: none;
+      }
+
+      .container {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 12px;
+        max-width: 100%;
+        cursor: pointer;
+        font-size: var(--space-2);
+        line-height: calc(var(--scape-2) + 2px);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: var(--space-2);
+        width: var(--space-2);
+        background-color: var(--color-bg-light);
+        border-radius: 50%;
+        transition: 0.4s;
+        border: 1px solid var(--color-primary);
+      }
+
+      .checkmark.checkbox {
+        border-radius: 20%;
+      }
+
+      .container:hover input ~ .checkmark {
+        background-color: #eee;
+      }
+
+      .container input:checked ~ .checkmark {
+        background-color: var(--color-primary);
+      }
+
+      .checkmark:after {
+        position: relative;
+        content: "✓";
+        line-height: var(--space-2);
+        font-size: calc(var(--space-2) - 2px);
+        padding-top: 1px;
+        color: white;
+        text-align: center;
+        display: none;
+      }
+
+      .container input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      .thank-you {
+        max-width: 640px;
+
+        margin: 20px auto;
+        padding: 20px;
+        text-align: center;
+
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+      }
+      .thank-you p.thank-you-title {
+        font-size: 24pt;
+        font-weight: normal;
+        text-decoration: underline;
+      }
+      .thank-you p.thank-you-subtitle {
+        font-size: 16pt;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p id="top">- Survey -</p>
+    </header>
+    <div class="wrap">
+      <form id="survey-form" method="post" action-xhr="">
+        <div id="survey" class="stepper simple">
+          <section>
+            <div class="top-bar"></div>
+            <div hidden id="content1" class="content">
+              <p class="question">1. Lorem ipsum dolor sit?</p>
+              <div class="poll">
+                <label class="container"
+                  >A
+                  <input
+                    type="radio"
+                    name="q1-poll"
+                    value="A"
+                    onclick="handleQ1(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >B
+                  <input
+                    type="radio"
+                    name="q1-poll"
+                    value="B"
+                    onclick="handleQ1(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >C
+                  <input
+                    type="radio"
+                    name="q1-poll"
+                    value="C"
+                    onclick="handleQ1(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Other
+                  <input
+                    type="radio"
+                    name="q1-poll"
+                    value="Other"
+                    onclick="handleQ1(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              <input type="text" id="q1-other-input" class="other-input" />
+              <p class="question">2. Let consectetur adipisicing elit.</p>
+              <div class="poll">
+                <label class="container"
+                  >A
+                  <input type="radio" name="q2-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >B
+                  <input type="radio" name="q2-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >C
+                  <input type="radio" name="q2-poll" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <p class="question">
+                3. Ad eius quas vero recusandae tempore tenetur cupiditate?
+              </p>
+              <p class="sub-question">
+                Rank the claim selecting a value from 1 to 5.
+              </p>
+
+              <div class="poll poll-horizontal">
+                <label class="container"
+                  >1
+                  <input type="radio" name="q3-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >2
+                  <input type="radio" name="q3-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >3
+                  <input type="radio" name="q3-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >4
+                  <input type="radio" name="q3-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >5
+                  <input type="radio" name="q3-poll" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <p class="question">
+                4. Answer to claims below, selecting option describing your
+                feelings towards the claim.
+              </p>
+              <div class="multi-question">
+                <div class="multi-wrap">
+                  <div class="multi-text">
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Repudiandae, quam.
+                    </p>
+                  </div>
+                  <div class="poll multi-poll">
+                    <table class="multi-table">
+                      <tr>
+                        <th>Very bad</th>
+                        <th>Bad</th>
+                        <th>Neutral</th>
+                        <th>Good</th>
+                        <th>Very good</th>
+                      </tr>
+                      <tr style="text-align: center">
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_1-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_1-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_1-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_1-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_1-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="multi-wrap">
+                  <div class="multi-text">
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Repudiandae, quam. Lorem ipsum dolor sit amet consectetur,
+                      adipisicing elit. Assumenda, magnam?
+                    </p>
+                  </div>
+                  <div class="poll multi-poll">
+                    <table class="multi-table">
+                      <tr>
+                        <th>Very bad</th>
+                        <th>Bad</th>
+                        <th>Neutral</th>
+                        <th>Good</th>
+                        <th>Very good</th>
+                      </tr>
+                      <tr style="text-align: center">
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_2-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_2-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_2-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_2-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_2-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="multi-wrap">
+                  <div class="multi-text">
+                    <p>Atque beatae possimus non perferendis.</p>
+                  </div>
+                  <div class="poll multi-poll">
+                    <table class="multi-table">
+                      <tr>
+                        <th>Very bad</th>
+                        <th>Bad</th>
+                        <th>Neutral</th>
+                        <th>Good</th>
+                        <th>Very good</th>
+                      </tr>
+                      <tr style="text-align: center">
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_3-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_3-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_3-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_3-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_3-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="multi-wrap">
+                  <div class="multi-text">
+                    <p>
+                      Ullam nesciunt tenetur odio molestias, delectus
+                      dignissimos doloremque maiores, assumenda laboriosam neque
+                      eum animi.
+                    </p>
+                  </div>
+                  <div class="poll multi-poll">
+                    <table class="multi-table">
+                      <tr>
+                        <th>Very bad</th>
+                        <th>Bad</th>
+                        <th>Neutral</th>
+                        <th>Good</th>
+                        <th>Very good</th>
+                      </tr>
+                      <tr style="text-align: center">
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_4-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_4-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_4-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_4-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_4-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="multi-wrap">
+                  <div class="multi-text">
+                    <p>
+                      Omnis numquam ipsa reiciendis nam ex illo odio dolorum
+                      facere. Quo quas necessitatibus cum dolores inventore.
+                    </p>
+                  </div>
+                  <div class="poll multi-poll">
+                    <table class="multi-table">
+                      <tr>
+                        <th>Very bad</th>
+                        <th>Bad</th>
+                        <th>Neutral</th>
+                        <th>Good</th>
+                        <th>Very good</th>
+                      </tr>
+                      <tr style="text-align: center">
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_5-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_5-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_5-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_5-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <label class="container">
+                            <input type="radio" name="q4_5-poll" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="content2" class="content">
+              <p class="question">5. Similique ullam quia optio?</p>
+              <div class="poll poll-horizontal">
+                <label class="container"
+                  >1
+                  <input type="radio" name="q5-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >2
+                  <input type="radio" name="q5-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >3
+                  <input type="radio" name="q5-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >4
+                  <input type="radio" name="q5-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >5
+                  <input type="radio" name="q5-poll" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <p class="question">6. Lorem ipsum dolor sit?</p>
+              <p class="sub-question">Select up to 3 items.</p>
+              <div>
+                <label class="container"
+                  >Cat
+                  <input type="checkbox" name="q6-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >Dog
+                  <input type="checkbox" name="q6-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >Horse
+                  <input type="checkbox" name="q6-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >Pig
+                  <input type="checkbox" name="q6-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+              </div>
+
+              <p class="question">7. Aya ra su tero?</p>
+              <div class="poll">
+                <label class="container"
+                  >Lorem, ipsum dolor
+                  <input type="radio" name="q7-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Ullam quia
+                  <input type="radio" name="q7-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Suspendisse est justo
+                  <input type="radio" name="q7-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Pellentesque
+                  <input type="radio" name="q7-poll" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Praesent tempus
+                  <input type="radio" name="q7-poll" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <p class="question">8. Lorem ipsum dolor sit?</p>
+              <p class="sub-question">Select up to 5 items.</p>
+              <div>
+                <label class="container"
+                  >A
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >B
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >C
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >D
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >E
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >F
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >G
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+                <label class="container"
+                  >H
+                  <input type="checkbox" name="q8-poll" />
+                  <span class="checkmark checkbox"></span>
+                </label>
+              </div>
+            </div>
+            <div id="content3" class="content">
+              <p class="question">9. Lorem ipsum dolor sit amet.</p>
+              <p class="sub-question">
+                Score how strongly you support the claim.
+              </p>
+              <div class="range-selector">
+                <p id="slider-value">5</p>
+                <input id="q9-slider" type="range" min="0" max="10" value="5" />
+              </div>
+              <p class="question">10. Lorem ipsum dolor sit?</p>
+              <div class="poll">
+                <label class="container"
+                  >A
+                  <input
+                    type="radio"
+                    name="q10-poll"
+                    value="A"
+                    onclick="handleQ10(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >B
+                  <input
+                    type="radio"
+                    name="q10-poll"
+                    value="B"
+                    onclick="handleQ10(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >C
+                  <input
+                    type="radio"
+                    name="q10-poll"
+                    value="C"
+                    onclick="handleQ10(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >D
+                  <input
+                    type="radio"
+                    name="q10-poll"
+                    value="D"
+                    onclick="handleQ10(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="container"
+                  >Other
+                  <input
+                    type="radio"
+                    name="q10-poll"
+                    value="Other"
+                    onclick="handleQ10(this)"
+                  />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              <input type="text" id="q10-other-input" class="other-input" />
+            </div>
+            <div class="bottom-bar">
+              <button type="button" class="button-prev">back</button>
+              <div class="step-dots">
+                <i class="step-dot active"></i>
+                <i class="step-dot"></i>
+                <i class="step-dot"></i>
+              </div>
+              <button type="button" class="button-next">next</button>
+            </div>
+          </section>
+        </div>
+      </form>
+      <div hidden id="thanks" class="thank-you">
+        <p class="thank-you-title">Thank you</p>
+        <p class="thank-you-subtitle">
+          We are grateful to you for filling in the survey.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  document.addEventListener("DOMContentLoaded", function (event) {
+    let changeDisplay = (currentPage) => {
+      let content1 = document.querySelector("#content1");
+      let content2 = document.querySelector("#content2");
+      let content3 = document.querySelector("#content3");
+      let topBar = document.querySelector(".top-bar");
+      let dots = document.querySelectorAll(".step-dot");
+
+      if (currentPage === 0) {
+        prevPageBtn.style.display = "none";
+        topBar.textContent = "Page 1 out of 3";
+        content1.style.display = "block";
+        content2.style.display = "none";
+        content3.style.display = "none";
+        dots[0].className = "step-dot active";
+        dots[1].className = "step-dot";
+        dots[2].className = "step-dot";
+      }
+      if (currentPage === 1) {
+        prevPageBtn.style.display = "block";
+        nextPageBtn.textContent = "Next";
+        nextPageBtn.removeAttribute("disabled");
+        topBar.textContent = "Page 2 out of 3";
+        content1.style.display = "none";
+        content2.style.display = "block";
+        content3.style.display = "none";
+        dots[0].className = "step-dot active";
+        dots[1].className = "step-dot active";
+        dots[2].className = "step-dot";
+      }
+      if (currentPage === 2) {
+        prevPageBtn.style.display = "block";
+        nextPageBtn.textContent = "Finish";
+
+        topBar.textContent = "Page 3 out of 3";
+        content1.style.display = "none";
+        content2.style.display = "none";
+        content3.style.display = "block";
+        dots[0].className = "step-dot active";
+        dots[1].className = "step-dot active";
+        dots[2].className = "step-dot active";
+        checkSurveyCompletion();
+      }
+    };
+    let q9Slider = document.querySelector("#q9-slider");
+    let q9SliderValue = document.querySelector("#slider-value");
+    q9Slider.addEventListener(
+      "change",
+      (e) => (q9SliderValue.textContent = e.target.value)
+    );
+
+    let q6max = 3;
+    let q6Checkboxes = document.getElementsByName("q6-poll");
+
+    q6Checkboxes.forEach((c) =>
+      c.addEventListener("click", () => {
+        if ([...q6Checkboxes].filter((cb) => cb.checked).length <= q6max) {
+        } else {
+          c.checked = false;
+        }
+      })
+    );
+
+    let q8max = 5;
+    let q8Checkboxes = document.getElementsByName("q8-poll");
+
+    q8Checkboxes.forEach((c) =>
+      c.addEventListener("click", () => {
+        if ([...q8Checkboxes].filter((cb) => cb.checked).length <= q8max) {
+        } else {
+          c.checked = false;
+        }
+      })
+    );
+
+    let currentPage = 0;
+    let surveyForm = document.querySelector("#survey-form");
+    let thanks = document.querySelector("#thanks");
+    let prevPageBtn = document.querySelector(".button-prev");
+    let nextPageBtn = document.querySelector(".button-next");
+    changeDisplay(currentPage);
+    prevPageBtn.addEventListener("click", () => {
+      --currentPage;
+      changeDisplay(currentPage);
+    });
+
+    nextPageBtn.addEventListener("click", () => {
+      if (currentPage < 2) {
+        ++currentPage;
+        changeDisplay(currentPage);
+      } else {
+        if (checkSurveyCompletion()) {
+          thanks.removeAttribute("hidden");
+          surveyForm.setAttribute("hidden", "true");
+        }
+      }
+    });
+  });
+
+  function handleQ1(myRadio) {
+    let q1OtherInput = document.querySelector("#q1-other-input");
+    var selectedValue = myRadio.value;
+    if (selectedValue == "Other") {
+      q1OtherInput.style.display = "block";
+    } else {
+      q1OtherInput.style.display = "none";
+    }
+  }
+
+  function handleQ10(myRadio) {
+    let q10OtherInput = document.querySelector("#q10-other-input");
+    var selectedValue = myRadio.value;
+    if (selectedValue == "Other") {
+      q10OtherInput.style.display = "block";
+    } else {
+      q10OtherInput.style.display = "none";
+    }
+    checkSurveyCompletion();
+  }
+
+  let x = document.getElementsByName("q10-poll");
+
+  function checkSurveyCompletion() {
+    let nextPageBtn = document.querySelector(".button-next");
+
+    let q1Answered =
+      [...document.getElementsByName("q1-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q2Answered =
+      [...document.getElementsByName("q2-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q3Answered =
+      [...document.getElementsByName("q3-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q4_1Answered =
+      [...document.getElementsByName("q4_1-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q4_2Answered =
+      [...document.getElementsByName("q4_2-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q4_3Answered =
+      [...document.getElementsByName("q4_3-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q4_4Answered =
+      [...document.getElementsByName("q4_4-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q4_5Answered =
+      [...document.getElementsByName("q4_5-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q5Answered =
+      [...document.getElementsByName("q5-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q6Answered =
+      [...document.getElementsByName("q6-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q7Answered =
+      [...document.getElementsByName("q7-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q8Answered =
+      [...document.getElementsByName("q8-poll")].filter((q) => q.checked)
+        .length >= 1;
+    let q10Answered =
+      [...document.getElementsByName("q10-poll")].filter((q) => q.checked)
+        .length >= 1;
+
+    let completed =
+      q1Answered &&
+      q2Answered &&
+      q3Answered &&
+      q4_1Answered &&
+      q4_2Answered &&
+      q4_3Answered &&
+      q4_4Answered &&
+      q4_5Answered &&
+      q5Answered &&
+      q6Answered &&
+      q7Answered &&
+      q8Answered &&
+      q10Answered;
+
+    if (!completed) {
+      nextPageBtn.setAttribute("disabled", "true");
+    } else {
+      nextPageBtn.removeAttribute("disabled");
+    }
+    return completed;
+  }
+</script>
